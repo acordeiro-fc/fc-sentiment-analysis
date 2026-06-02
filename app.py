@@ -10,22 +10,32 @@ from sqlalchemy import create_engine
 
 st.set_page_config(page_title="Survey Feedback Dashboard", layout="wide")
 
-def login_screen():
-    st.header("This app is private")
-    st.subheader("Please log in")
+# def login_screen():
+#     st.header("This app is private")
+#     st.subheader("Please log in")
 
-    if st.button("Log in with Google"):
-        st.login(provider="google")
+#     if st.button("Log in with Google"):
+#         st.login(provider="google")
 
+
+# if not st.user.is_logged_in:
+#     login_screen()
+#     st.stop()
+
+
+# if st.user.email not in st.secrets["ALLOWED_EMAILS"]:
+#     st.error("You are not authorized to access this app.")
+#     st.stop()
+
+st.write("Logged in:", st.user.is_logged_in)
 
 if not st.user.is_logged_in:
-    login_screen()
+    if st.button("Login"):
+        st.login("google")
     st.stop()
 
-
-if st.user.email not in st.secrets["ALLOWED_EMAILS"]:
-    st.error("You are not authorized to access this app.")
-    st.stop()
+st.write("Email:", st.user.email)
+st.success("Login successful")
 
 # ─────────────────────────────
 # CUSTOM CSS
