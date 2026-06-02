@@ -11,38 +11,17 @@
 # st.set_page_config(page_title="Survey Feedback Dashboard", layout="wide")
 
 import streamlit as st
-from streamlit_oauth import OAuth2Component
 
-CLIENT_ID = st.secrets["google_oauth"]["client_id"]
-CLIENT_SECRET = st.secrets["google_oauth"]["client_secret"]
-
-oauth2 = OAuth2Component(
-    client_id=CLIENT_ID,
-    client_secret=CLIENT_SECRET,
-    authorize_endpoint="https://accounts.google.com/o/oauth2/v2/auth",
-    token_endpoint="https://oauth2.googleapis.com/token",
-)
-
-if "token" not in st.session_state:
-    result = oauth2.authorize_button(
-        name="Login with Google",
-        redirect_uri="https://fc-survey-analysis.streamlit.app",
-        scope="openid email profile",
-    )
-    if result and "token" in result:
-        st.session_state.token = result["token"]
-        st.rerun()
+if not st.user.is_logged_in:
+    if st.button("Login with Google"):
+        st.login()  # no provider argument needed
     st.stop()
 
-import jwt
-token = st.session_state.token
-email = jwt.decode(token["id_token"], options={"verify_signature": False})["email"]
-
-if email not in st.secrets["ALLOWED_EMAILS"]:
+if st.user.email not in st.secrets["ALLOWED_EMAILS"]:
     st.error("Not authorized")
     st.stop()
 
-st.write(f"Hello, {email}")
+st.write(f"Hello, {st.user.email}")
 # # else:
 # # ─────────────────────────────
 # # CUSTOM CSS
