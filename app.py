@@ -11,29 +11,38 @@
 # st.set_page_config(page_title="Survey Feedback Dashboard", layout="wide")
 
 import streamlit as st
-from streamlit_google_auth import Authenticate
+from streamlit_oauth import OAuth2Component
 
-authenticator = Authenticate(
-    secret_credentials_path=None,
-    cookie_name="my_cookie",
-    cookie_key=st.secrets["googleoauth"]["cookie_secret"],
-    redirect_uri=st.secrets["auth"]["redirect_uri"],
-    client_id=st.secrets["googleoauth"]["client_id"],
-    client_secret=st.secrets["googleoauth"]["client_secret"],
+CLIENT_ID = st.secrets["google_oauth"]["client_id"]
+CLIENT_SECRET = st.secrets["google_oauth"]["client_secret"]
+
+oauth2 = OAuth2Component(
+    client_id=CLIENT_ID,
+    client_secret=CLIENT_SECRET,
+    authorize_endpoint="https://accounts.google.com/o/oauth2/v2/auth",
+    token_endpoint="https://oauth2.googleapis.com/token",
 )
 
-authenticator.check_authentification()
-
-if not st.session_state.get("connected"):
-    authenticator.login()
+if "token" not in st.session_state:
+    result = oauth2.authorize_button(
+        name="Login with Google",
+        redirect_uri="https://fc-survey-analysis.streamlit.app",
+        scope="openid email profile",
+    )
+    if result and "token" in result:
+        st.session_state.token = result["token"]
+        st.rerun()
     st.stop()
 
-if st.session_state["email"] not in st.secrets["ALLOWED_EMAILS"]:
+import jwt
+token = st.session_state.token
+email = jwt.decode(token["id_token"], options={"verify_signature": False})["email"]
+
+if email not in st.secrets["ALLOWED_EMAILS"]:
     st.error("Not authorized")
     st.stop()
 
-# Your app here
-st.write(f"Hello, {st.session_state['name']}")
+st.write(f"Hello, {email}")
 # # else:
 # # ─────────────────────────────
 # # CUSTOM CSS
