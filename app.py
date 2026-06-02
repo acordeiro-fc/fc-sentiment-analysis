@@ -8,7 +8,12 @@ from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 from sqlalchemy import create_engine
     
-# st.set_page_config(page_title="Survey Feedback Dashboard", layout="wide")
+st.set_page_config(page_title="Survey Feedback Dashboard", layout="wide")
+
+st.write("Auth section exists:", "auth" in st.secrets)
+
+if "auth" in st.secrets:
+    st.write("Providers:", list(st.secrets["auth"].keys()))
 
 st.write("Logged in:", st.user.is_logged_in)
 
