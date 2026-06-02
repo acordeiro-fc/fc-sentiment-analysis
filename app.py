@@ -11,14 +11,29 @@
 # st.set_page_config(page_title="Survey Feedback Dashboard", layout="wide")
 
 import streamlit as st
+from streamlit_google_auth import Authenticate
 
-st.write("Query params:", st.query_params)
-st.write("User:", st.user)
+authenticator = Authenticate(
+    secret_credentials_path=None,
+    cookie_name="my_cookie",
+    cookie_key=st.secrets["cookie_secret"],
+    redirect_uri=st.secrets["google_oauth"]["redirect_uri"],
+    client_id=st.secrets["google_oauth"]["client_id"],
+    client_secret=st.secrets["google_oauth"]["client_secret"],
+)
 
-if not st.user.is_logged_in:
-    if st.button("Login with Google"):
-        st.login(provider="google")
+authenticator.check_authentification()
+
+if not st.session_state.get("connected"):
+    authenticator.login()
     st.stop()
+
+if st.session_state["email"] not in st.secrets["ALLOWED_EMAILS"]:
+    st.error("Not authorized")
+    st.stop()
+
+# Your app here
+st.write(f"Hello, {st.session_state['name']}")
 # # else:
 # # ─────────────────────────────
 # # CUSTOM CSS
