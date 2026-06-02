@@ -27,9 +27,9 @@ if st.user.email not in st.secrets["ALLOWED_EMAILS"]:
     st.error("You are not authorized to access this app.")
     st.stop()
 
-─────────────────────────────
-CUSTOM CSS
-─────────────────────────────
+# ─────────────────────────────
+# CUSTOM CSS
+# ─────────────────────────────
 YELLOW = "#fef3b3"
 BORDER = "#828281"
 TEXT = "#2E2E2E"
