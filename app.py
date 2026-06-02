@@ -9,12 +9,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sqlalchemy import create_engine
     
 st.set_page_config(page_title="Survey Feedback Dashboard", layout="wide")
-st.write("User object:", dict(st.user))
-st.write("Auth section exists:", "auth" in st.secrets)
-
-if "auth" in st.secrets:
-    st.write("Providers:", list(st.secrets["auth"].keys()))
-
+st.write(st.__version__)
 st.write("Logged in:", st.user.is_logged_in)
 
 if st.user.is_logged_in:
