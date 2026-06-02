@@ -5,3 +5,5 @@ plotly==6.7.0
 sentence-transformers==5.5.1
 scikit-learn==1.8.0
 psycopg2-binary>=2.9.9
+SQLAlchemy==2.0.43
+torchvision==0.24.0
