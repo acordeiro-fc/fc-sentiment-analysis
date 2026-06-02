@@ -12,7 +12,6 @@ st.set_page_config(page_title="Survey Feedback Dashboard", layout="wide")
 
 def login_screen():
     st.header("This app is private")
-    st.subheader("Please log in")
 
     if st.button("Log in with Google"):
         st.login(provider="google")
@@ -21,9 +20,13 @@ if not st.user.is_logged_in:
     login_screen()
     st.stop()
 
-if st.user.email not in st.secrets["ALLOWED_EMAILS"]:
+allowed = st.secrets["ALLOWED_EMAILS"]
+
+if st.user.email not in allowed:
     st.error("You are not authorized to access this app.")
     st.stop()
+
+st.success(f"Welcome {st.user.email}")
 
 # else:
 # ─────────────────────────────
