@@ -10,7 +10,7 @@ from sqlalchemy import create_engine
     
 st.set_page_config(page_title="Survey Feedback Dashboard", layout="wide")
 
-ef login_screen():
+def login_screen():
     st.header("This app is private")
     st.subheader("Please log in")
 
