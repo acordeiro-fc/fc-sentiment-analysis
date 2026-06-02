@@ -13,7 +13,7 @@ st.set_page_config(page_title="Survey Feedback Dashboard", layout="wide")
 def login_screen():
     st.header("This app is private.")
     st.subheader("Please log in.")
-    st.button("Log in with Google", on_click=st.login)
+    st.button("Log in with Google", on_click=st.login(provider="google")
 
 if not st.user.is_logged_in:
     login_screen()
