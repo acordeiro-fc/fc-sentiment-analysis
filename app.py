@@ -1,4 +1,4 @@
-import streamlit as st
+# import streamlit as st
 # import pandas as pd
 # import numpy as np
 # import plotly.express as px
@@ -10,16 +10,18 @@ import streamlit as st
     
 # st.set_page_config(page_title="Survey Feedback Dashboard", layout="wide")
 
-st.write("Logged in:", st.user.is_logged_in)
+import streamlit as st
 
+# 🔐 HARD AUTH GATE (critical)
 if not st.user.is_logged_in:
-    if st.button("Login with Google"):
-        st.login(provider="google")
-        st.stop()
-
+    st.switch_page("auth_gate.py")
     st.stop()
 
 email = st.user.email
+
+if email not in st.secrets["ALLOWED_EMAILS"]:
+    st.error("Unauthorized")
+    st.stop()
 
 st.success(f"Welcome {email}")
 # # else:
