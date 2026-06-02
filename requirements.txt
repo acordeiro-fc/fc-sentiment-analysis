@@ -4,3 +4,4 @@ numpy
 plotly
 sentence-transformers
 scikit-learn
+psycopg2
