@@ -1,12 +1,12 @@
 import streamlit as st
-import pandas as pd
-import numpy as np
-import plotly.express as px
-from collections import Counter
+# import pandas as pd
+# import numpy as np
+# import plotly.express as px
+# from collections import Counter
 
-from sentence_transformers import SentenceTransformer
-from sklearn.metrics.pairwise import cosine_similarity
-from sqlalchemy import create_engine
+# from sentence_transformers import SentenceTransformer
+# from sklearn.metrics.pairwise import cosine_similarity
+# from sqlalchemy import create_engine
     
 # st.set_page_config(page_title="Survey Feedback Dashboard", layout="wide")
 
