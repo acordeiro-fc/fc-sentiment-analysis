@@ -26,9 +26,13 @@ st.set_page_config(page_title="Survey Feedback Dashboard", layout="wide")
 # if st.user.email not in st.secrets["ALLOWED_EMAILS"]:
 #     st.error("You are not authorized to access this app.")
 #     st.stop()
-st.write("Has auth section:", "auth" in st.secrets)
-st.write("Has google section:", "google" in st.secrets["auth"])
-st.write("Logged in:", st.user.is_logged_in)
+st.write("Streamlit version:", st.__version__)
+
+try:
+    st.write("Auth section exists:", "auth" in st.secrets)
+    st.write("Google section exists:", "google" in st.secrets["auth"])
+except Exception as e:
+    st.error(str(e))
 
 if not st.user.is_logged_in:
     if st.button("Login"):
