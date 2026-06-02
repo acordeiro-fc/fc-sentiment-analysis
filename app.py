@@ -16,10 +16,10 @@ from streamlit_google_auth import Authenticate
 authenticator = Authenticate(
     secret_credentials_path=None,
     cookie_name="my_cookie",
-    cookie_key=st.secrets["cookie_secret"],
-    redirect_uri=st.secrets["google_oauth"]["redirect_uri"],
-    client_id=st.secrets["google_oauth"]["client_id"],
-    client_secret=st.secrets["google_oauth"]["client_secret"],
+    cookie_key=st.secrets["googleoauth"]["cookie_secret"],
+    redirect_uri=st.secrets["googleoauth"]["redirect_uri"],
+    client_id=st.secrets["googleoauth"]["client_id"],
+    client_secret=st.secrets["googleoauth"]["client_secret"],
 )
 
 authenticator.check_authentification()
