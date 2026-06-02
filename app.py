@@ -12,7 +12,8 @@
 
 import streamlit as st
 
-st.write(st.user)  # dump everything
+st.write("Query params:", st.query_params)
+st.write("User:", st.user)
 
 if not st.user.is_logged_in:
     if st.button("Login with Google"):
