@@ -13,6 +13,7 @@
 import streamlit as st
 
 if not st.user.is_logged_in:
+    st.login(provider="google")
     st.stop()
 
 if st.user.email not in st.secrets["ALLOWED_EMAILS"]:
