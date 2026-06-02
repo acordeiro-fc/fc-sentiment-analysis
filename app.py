@@ -8,19 +8,18 @@ from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 from sqlalchemy import create_engine
     
-st.set_page_config(page_title="Survey Feedback Dashboard", layout="wide")
+# st.set_page_config(page_title="Survey Feedback Dashboard", layout="wide")
 
-if not st.user.is_logged_in:
+st.write("Logged in:", st.user.is_logged_in)
+
+if st.user.is_logged_in:
+    st.write("Email:", st.user.email)
+else:
     st.button(
         "Login with Google",
         on_click=st.login,
         kwargs={"provider": "google"},
     )
-    st.stop()
-
-if st.user.email not in st.secrets["ALLOWED_EMAILS"]:
-    st.error("Unauthorized")
-    st.stop()
 # else:
 # ─────────────────────────────
 # CUSTOM CSS
