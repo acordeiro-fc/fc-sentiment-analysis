@@ -6,8 +6,20 @@ from collections import Counter
 
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
+from sqlalchemy import create_engine
 
 st.set_page_config(page_title="Survey Feedback Dashboard", layout="wide")
+
+def login_screen():
+    st.header("This app is private.")
+    st.subheader("Please log in.")
+    st.button("Log in with Google", on_click=st.login)
+
+if not st.user.is_logged_in:
+    login_screen()
+
+if st.user.email not in st.secrets["ALLOWED_EMAILS"]:
+    st.stop()
 
 # ─────────────────────────────
 # CUSTOM CSS
@@ -89,10 +101,27 @@ st.markdown(
 # ─────────────────────────────
 # LOAD DATA
 # ─────────────────────────────
-@st.cache_data
+
+@st.cache_resource
+def get_engine():
+    print(st.secrets["DATABASE_URL"])
+    return create_engine(st.secrets["DATABASE_URL"])
+
+
+@st.cache_data(ttl=300)
 def load_data():
-    customer_df = pd.read_excel("customer_survey_01-06.xlsx")
-    newsletter_df = pd.read_excel("newsletter_survey_01-06.xlsx")
+    engine = get_engine()
+
+    customer_df = pd.read_sql(
+        "SELECT * FROM customer_survey",
+        engine
+    )
+
+    newsletter_df = pd.read_sql(
+        "SELECT * FROM newsletter_survey",
+        engine
+    )
+
     return customer_df, newsletter_df
 
 
@@ -127,7 +156,7 @@ if "subpage" not in st.session_state:
 # ─────────────────────────────
 # SIDEBAR
 # ─────────────────────────────
-st.sidebar.image("logo.png.png", width=330)
+st.sidebar.image("logo.png", width=330)
 st.sidebar.title("Dashboard Menu")
 
 
