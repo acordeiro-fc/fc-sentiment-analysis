@@ -12,18 +12,12 @@
 
 import streamlit as st
 
+st.write(st.user)  # dump everything
+
 if not st.user.is_logged_in:
-    st.title("Welcome")
     if st.button("Login with Google"):
         st.login(provider="google")
     st.stop()
-
-if st.user.email not in st.secrets["ALLOWED_EMAILS"]:
-    st.error("Not authorized")
-    st.stop()
-
-# Your app here
-st.write(f"Hello, {st.user.email}")
 # # else:
 # # ─────────────────────────────
 # # CUSTOM CSS
