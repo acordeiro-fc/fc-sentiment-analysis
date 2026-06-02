@@ -12,18 +12,12 @@
 
 import streamlit as st
 
-# 🔐 HARD AUTH GATE (critical)
 if not st.user.is_logged_in:
-    st.switch_page("pages/auth_gate")
     st.stop()
 
-email = st.user.email
-
-if email not in st.secrets["ALLOWED_EMAILS"]:
-    st.error("Unauthorized")
+if st.user.email not in st.secrets["ALLOWED_EMAILS"]:
+    st.error("Not authorized")
     st.stop()
-
-st.success(f"Welcome {email}")
 # # else:
 # # ─────────────────────────────
 # # CUSTOM CSS
