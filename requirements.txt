@@ -7,3 +7,5 @@ scikit-learn==1.8.0
 psycopg2-binary>=2.9.9
 SQLAlchemy==2.0.43
 torchvision==0.24.0
+Authlib==1.6.5
+google-auth==2.41.1
