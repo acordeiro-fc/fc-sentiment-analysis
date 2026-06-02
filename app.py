@@ -26,7 +26,8 @@ st.set_page_config(page_title="Survey Feedback Dashboard", layout="wide")
 # if st.user.email not in st.secrets["ALLOWED_EMAILS"]:
 #     st.error("You are not authorized to access this app.")
 #     st.stop()
-
+st.write("Has auth section:", "auth" in st.secrets)
+st.write("Has google section:", "google" in st.secrets["auth"])
 st.write("Logged in:", st.user.is_logged_in)
 
 if not st.user.is_logged_in:
