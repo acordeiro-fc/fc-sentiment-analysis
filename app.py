@@ -8,23 +8,19 @@ from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 from sqlalchemy import create_engine
 
+def login_screen():
+    st.header("This app is private")
+    st.subheader("Please log in")
+
+    if st.button("Log in with Google"):
+        st.login(provider="google")
+
+
 if not st.user.is_logged_in:
+    login_screen()
     st.stop()
     
 st.set_page_config(page_title="Survey Feedback Dashboard", layout="wide")
-
-# def login_screen():
-#     st.header("This app is private")
-#     st.subheader("Please log in")
-
-#     if st.button("Log in with Google"):
-#         st.login(provider="google")
-
-
-# if not st.user.is_logged_in:
-#     login_screen()
-#     st.stop()
-
 
 # if st.user.email not in st.secrets["ALLOWED_EMAILS"]:
 #     st.error("You are not authorized to access this app.")
