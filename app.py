@@ -9,17 +9,10 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sqlalchemy import create_engine
     
 st.set_page_config(page_title="Survey Feedback Dashboard", layout="wide")
-st.write(st.__version__)
-st.write("Logged in:", st.user.is_logged_in)
 
-if st.user.is_logged_in:
-    st.write("Email:", st.user.email)
-else:
-    st.button(
-        "Login with Google",
-        on_click=st.login,
-        kwargs={"provider": "google"},
-    )
+st.write("Version:", st.__version__)
+st.write("Has login:", hasattr(st, "login"))
+st.write("Has user:", hasattr(st, "user"))
 # else:
 # ─────────────────────────────
 # CUSTOM CSS
