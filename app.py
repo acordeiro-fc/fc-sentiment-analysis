@@ -14,7 +14,7 @@ import streamlit as st
 
 # 🔐 HARD AUTH GATE (critical)
 if not st.user.is_logged_in:
-    st.switch_page("auth_gate.py")
+    st.switch_page("pages/auth_gate.py")
     st.stop()
 
 email = st.user.email
