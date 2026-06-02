@@ -10,20 +10,18 @@ from sqlalchemy import create_engine
     
 # st.set_page_config(page_title="Survey Feedback Dashboard", layout="wide")
 
-st.write(st.user.is_logged_in)
+st.write("Logged in:", st.user.is_logged_in)
+
 if not st.user.is_logged_in:
-    st.markdown("## Login required")
-    st.button("Login with Google", on_click=st.login, kwargs={"provider": "google"})
+    if st.button("Login with Google"):
+        st.login(provider="google")
+        st.stop()
+
     st.stop()
 
 email = st.user.email
 
-if email not in st.secrets["ALLOWED_EMAILS"]:
-    st.error("Unauthorized")
-    st.stop()
-
-else:
-    st.success(f"Welcome {email}")
+st.success(f"Welcome {email}")
 # # else:
 # # ─────────────────────────────
 # # CUSTOM CSS
