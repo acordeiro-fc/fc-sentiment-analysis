@@ -229,7 +229,6 @@ else:
 
     if newsletter_question == "What topics would you like to see covered in our 2026 newsletters?":
         TEXT_COL = "Topics 2026 newsletter"
-        TEXT_COL = "What topics would you like to see covered in our 2026 newsletters?"
         CLEAN_TEXT_COL = "clean_translated_1"
         SENTIMENT_COL = "sentiment"
         TOPIC_COL = "topic_label"
