@@ -130,7 +130,7 @@ def load_data():
 
 
 customer_df, newsletter_df = load_data()
-st.write(newsletter_df.columns)
+st.write(newsletter_df)
 # ─────────────────────────────
 # LOAD MODEL
 # ─────────────────────────────
