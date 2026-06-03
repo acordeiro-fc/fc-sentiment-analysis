@@ -16,88 +16,13 @@ st.set_page_config(
     layout="wide"
 )
 
-# ─────────────────────────────
-# SHARED STYLES
-# ─────────────────────────────
-st.markdown("""
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400;500&display=swap');
- 
-html, body, [data-testid="stAppViewContainer"], [data-testid="stMain"] {
-    background: #faf8f4 !important;
-}
- 
-#MainMenu, footer, header { visibility: hidden; }
-[data-testid="stToolbar"] { display: none; }
-</style>
-""", unsafe_allow_html=True)
- 
-# ─────────────────────────────
-# AUTH GATE
-# ─────────────────────────────
 if not st.user.is_logged_in:
-    st.markdown("""
-    <style>
-    [data-testid="stMain"] {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-    }
-    [data-testid="stMainBlockContainer"] {
-        max-width: 400px !important;
-        padding: 60px 40px !important;
-        background: white;
-        border: 1px solid #e8e2d9;
-        text-align: center;
-    }
-    div[data-testid="stButton"] > button {
-        font-family: 'Jost', sans-serif !important;
-        font-size: 11px !important;
-        font-weight: 500 !important;
-        letter-spacing: 3px !important;
-        text-transform: uppercase !important;
-        color: white !important;
-        background: #2a2118 !important;
-        border: none !important;
-        border-radius: 0 !important;
-        padding: 14px 32px !important;
-        width: 100% !important;
-        transition: background 0.2s !important;
-    }
-    div[data-testid="stButton"] > button:hover {
-        background: #8a6f4e !important;
-    }
-    div[data-testid="stButton"] > button:focus:not(:active) {
-        box-shadow: none !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
- 
-    st.markdown("""
-        <div style="font-family: 'Jost', sans-serif; font-size: 11px; letter-spacing: 4px;
-                    text-transform: uppercase; color: #b0a090; margin-bottom: 16px;">
-            Fabienne Chapot
-        </div>
-        <div style="font-family: 'Cormorant Garamond', serif; font-size: 38px; font-weight: 300;
-                    color: #2a2118; line-height: 1.2; margin-bottom: 8px;">
-            Survey<br><em style="color: #8a6f4e;">Insights</em>
-        </div>
-        <div style="width: 32px; height: 1px; background: #c9b99a; margin: 24px auto;"></div>
-        <div style="font-family: 'Jost', sans-serif; font-size: 12px; font-weight: 300;
-                    color: #9c8c7a; letter-spacing: 0.5px; line-height: 1.8; margin-bottom: 32px;">
-            Internal analytics dashboard.<br>Sign in to continue.
-        </div>
-    """, unsafe_allow_html=True)
- 
-    st.button("Sign in with Google", on_click=st.login, args=["google"])
- 
-    st.markdown("""
-        <div style="font-family: 'Jost', sans-serif; font-size: 10px; color: #c4b8a8;
-                    letter-spacing: 1px; margin-top: 24px;">
-            Restricted access · Authorised personnel only
-        </div>
-    """, unsafe_allow_html=True)
+    col1, col2, col3 = st.columns([1, 1, 1])
+    with col2:
+        st.title("Survey Insights")
+        st.caption("Fabienne Chapot · Internal analytics dashboard")
+        st.write("")
+        st.button("Sign in with Google", on_click=st.login, args=["google"], use_container_width=True)
     st.stop()
  
 if st.user.email not in st.secrets["ALLOWED_EMAILS"]:
