@@ -22,7 +22,7 @@ if not st.user.is_logged_in:
         st.title("FC Survey Dashboard")
         st.caption("Fabienne Chapot · Internal analytics dashboard")
         st.write("")
-        st.button("Sign in with Google", on_click=st.login, args=["google"], use_container_width=True)
+        st.button("Sign in with Google", on_click=st.login, use_container_width=True)
     st.stop()
  
 if st.user.email not in st.secrets["ALLOWED_EMAILS"]:
