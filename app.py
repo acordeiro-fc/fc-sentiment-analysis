@@ -183,22 +183,6 @@ if st.user.email not in st.secrets["ALLOWED_EMAILS"]:
 # AUTHENTICATED APP
 # ─────────────────────────────
 
-# ─── Sidebar ───
-# st.sidebar.image("logo.png", width=330)
-
-with st.sidebar:
-    st.markdown(f"""
-        <div style="font-family: 'Jost', sans-serif; font-size: 12px; 
-                    color: #9c8c7a; letter-spacing: 1px; padding: 8px 0 16px 0;
-                    border-bottom: 1px solid #e8e2d9; margin-bottom: 16px;">
-            {st.user.email}
-        </div>
-    """, unsafe_allow_html=True)
-    st.button("Sign out", on_click=st.logout)
-
-st.title("Survey Insights")
-st.write(f"Welcome back.")
-
 # ─────────────────────────────
 # CUSTOM CSS
 # ─────────────────────────────
@@ -362,7 +346,15 @@ with st.sidebar.expander("Customer Survey", expanded=True):
 with st.sidebar.expander("Newsletter Survey", expanded=True):
     nav_button("Overview", "Newsletter Survey", "Overview", "newsletter_overview")
     nav_button("Semantic Search", "Newsletter Survey", "Semantic Search", "newsletter_search")
-
+with st.sidebar:
+    st.markdown(f"""
+        <div style="font-family: 'Jost', sans-serif; font-size: 12px; 
+                    color: #9c8c7a; letter-spacing: 1px; padding: 8px 0 16px 0;
+                    border-bottom: 1px solid #e8e2d9; margin-bottom: 16px;">
+            {st.user.email}
+        </div>
+    """, unsafe_allow_html=True)
+    st.button("Sign out", on_click=st.logout)
 
 survey_page = st.session_state.survey_page
 subpage = st.session_state.subpage
