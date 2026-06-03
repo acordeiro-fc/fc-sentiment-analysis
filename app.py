@@ -19,7 +19,7 @@ st.set_page_config(
 if not st.user.is_logged_in:
     col1, col2, col3 = st.columns([1, 1, 1])
     with col2:
-        st.title("Survey Insights")
+        st.title("FC Survey Dashboard")
         st.caption("Fabienne Chapot · Internal analytics dashboard")
         st.write("")
         st.button("Sign in with Google", on_click=st.login, args=["google"], use_container_width=True)
