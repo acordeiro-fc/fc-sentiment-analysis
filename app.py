@@ -17,164 +17,89 @@ st.set_page_config(
 )
 
 # ─────────────────────────────
-# LOGIN SCREEN STYLES
+# SHARED STYLES
 # ─────────────────────────────
-LOGIN_CSS = """
+st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap');
-
-/* Hide default streamlit chrome on login page */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400;500&display=swap');
+ 
+html, body, [data-testid="stAppViewContainer"], [data-testid="stMain"] {
+    background: #faf8f4 !important;
+}
+ 
 #MainMenu, footer, header { visibility: hidden; }
 [data-testid="stToolbar"] { display: none; }
-
-.login-wrapper {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #faf8f4;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    z-index: 0;
-}
-
-.login-card {
-    background: white;
-    border: 1px solid #e8e2d9;
-    padding: 64px 72px;
-    max-width: 480px;
-    width: 100%;
-    text-align: center;
-    position: relative;
-    box-shadow: 0 2px 40px rgba(0,0,0,0.06);
-}
-
-.login-card::before {
-    content: '';
-    position: absolute;
-    top: 12px; left: 12px; right: 12px; bottom: 12px;
-    border: 1px solid #f0ebe3;
-    pointer-events: none;
-}
-
-.login-ornament {
-    font-size: 28px;
-    letter-spacing: 8px;
-    color: #c9b99a;
-    margin-bottom: 32px;
-    display: block;
-}
-
-.login-brand {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 13px;
-    font-weight: 400;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: #9c8c7a;
-    margin-bottom: 8px;
-}
-
-.login-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 42px;
-    font-weight: 300;
-    color: #2a2118;
-    line-height: 1.1;
-    margin-bottom: 12px;
-}
-
-.login-title em {
-    font-style: italic;
-    color: #8a6f4e;
-}
-
-.login-divider {
-    width: 40px;
-    height: 1px;
-    background: #c9b99a;
-    margin: 28px auto;
-}
-
-.login-subtitle {
-    font-family: 'Jost', sans-serif;
-    font-size: 13px;
-    font-weight: 300;
-    color: #9c8c7a;
-    letter-spacing: 1px;
-    line-height: 1.8;
-    margin-bottom: 40px;
-}
-
-/* Style the Streamlit button to look elegant */
-div[data-testid="stButton"] > button {
-    font-family: 'Jost', sans-serif !important;
-    font-size: 11px !important;
-    font-weight: 500 !important;
-    letter-spacing: 3px !important;
-    text-transform: uppercase !important;
-    color: white !important;
-    background: #2a2118 !important;
-    border: none !important;
-    border-radius: 0 !important;
-    padding: 16px 40px !important;
-    width: 100% !important;
-    cursor: pointer !important;
-    transition: background 0.3s ease !important;
-}
-
-div[data-testid="stButton"] > button:hover {
-    background: #8a6f4e !important;
-}
-
-div[data-testid="stButton"] > button:focus {
-    box-shadow: none !important;
-    outline: none !important;
-}
-
-.login-footer {
-    font-family: 'Jost', sans-serif;
-    font-size: 11px;
-    color: #c4b8a8;
-    letter-spacing: 1px;
-    margin-top: 32px;
-}
-
-/* Center the button container */
-div[data-testid="stButton"] {
-    display: flex;
-    justify-content: center;
-}
 </style>
-"""
+""", unsafe_allow_html=True)
+ 
 # ─────────────────────────────
 # AUTH GATE
 # ─────────────────────────────
 if not st.user.is_logged_in:
-    st.markdown(LOGIN_CSS, unsafe_allow_html=True)
     st.markdown("""
-        <div class="login-wrapper">
-            <div class="login-card">
-                <span class="login-ornament">✦ ✦ ✦</span>
-                <p class="login-brand">Fabienne Chapot</p>
-                <h1 class="login-title">Survey<br><em>Insights</em></h1>
-                <div class="login-divider"></div>
-                <p class="login-subtitle">
-                    Internal analytics dashboard.<br>
-                    Sign in with your Google account to continue.
-                </p>
-            </div>
+    <style>
+    [data-testid="stMain"] {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+    }
+    [data-testid="stMainBlockContainer"] {
+        max-width: 400px !important;
+        padding: 60px 40px !important;
+        background: white;
+        border: 1px solid #e8e2d9;
+        text-align: center;
+    }
+    div[data-testid="stButton"] > button {
+        font-family: 'Jost', sans-serif !important;
+        font-size: 11px !important;
+        font-weight: 500 !important;
+        letter-spacing: 3px !important;
+        text-transform: uppercase !important;
+        color: white !important;
+        background: #2a2118 !important;
+        border: none !important;
+        border-radius: 0 !important;
+        padding: 14px 32px !important;
+        width: 100% !important;
+        transition: background 0.2s !important;
+    }
+    div[data-testid="stButton"] > button:hover {
+        background: #8a6f4e !important;
+    }
+    div[data-testid="stButton"] > button:focus:not(:active) {
+        box-shadow: none !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+ 
+    st.markdown("""
+        <div style="font-family: 'Jost', sans-serif; font-size: 11px; letter-spacing: 4px;
+                    text-transform: uppercase; color: #b0a090; margin-bottom: 16px;">
+            Fabienne Chapot
+        </div>
+        <div style="font-family: 'Cormorant Garamond', serif; font-size: 38px; font-weight: 300;
+                    color: #2a2118; line-height: 1.2; margin-bottom: 8px;">
+            Survey<br><em style="color: #8a6f4e;">Insights</em>
+        </div>
+        <div style="width: 32px; height: 1px; background: #c9b99a; margin: 24px auto;"></div>
+        <div style="font-family: 'Jost', sans-serif; font-size: 12px; font-weight: 300;
+                    color: #9c8c7a; letter-spacing: 0.5px; line-height: 1.8; margin-bottom: 32px;">
+            Internal analytics dashboard.<br>Sign in to continue.
         </div>
     """, unsafe_allow_html=True)
-
-    # The button renders on top of the card via Streamlit's flow
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        st.button("Sign in with Google", on_click=st.login, args=["google"])
-
-    st.markdown('<p class="login-footer">Restricted access · Authorised personnel only</p>', unsafe_allow_html=True)
+ 
+    st.button("Sign in with Google", on_click=st.login, args=["google"])
+ 
+    st.markdown("""
+        <div style="font-family: 'Jost', sans-serif; font-size: 10px; color: #c4b8a8;
+                    letter-spacing: 1px; margin-top: 24px;">
+            Restricted access · Authorised personnel only
+        </div>
+    """, unsafe_allow_html=True)
     st.stop()
-
+ 
 if st.user.email not in st.secrets["ALLOWED_EMAILS"]:
     st.error("Not authorized. Contact your administrator.")
     st.stop()
