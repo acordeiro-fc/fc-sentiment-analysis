@@ -143,7 +143,7 @@ if "subpage" not in st.session_state:
 # ─────────────────────────────
 # SIDEBAR
 # ─────────────────────────────
-st.sidebar.image("logo.png.png", width=330)
+st.sidebar.image("logo.png", width=330)
 st.sidebar.title("Dashboard Menu")
 
 
