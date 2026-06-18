@@ -4,34 +4,11 @@ import numpy as np
 import plotly.express as px
 from collections import Counter
 
+from sqlalchemy import create_engine
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
-from sqlalchemy import create_engine
 
-import streamlit as st
-
-st.set_page_config(
-    page_title="FC Survey Dashboard",
-    page_icon="✦",
-    layout="wide"
-)
-
-if not st.user.is_logged_in:
-    col1, col2, col3 = st.columns([1, 1, 1])
-    with col2:
-        st.title("FC Survey Dashboard")
-        st.caption("Fabienne Chapot · Internal analytics dashboard")
-        st.write("")
-        st.button("Sign in with Google", on_click=st.login, use_container_width=True)
-    st.stop()
- 
-if st.user.email not in st.secrets["ALLOWED_EMAILS"]:
-    st.error("Not authorized. Contact your administrator.")
-    st.stop()
-
-# ─────────────────────────────
-# AUTHENTICATED APP
-# ─────────────────────────────
+st.set_page_config(page_title="Survey Feedback Dashboard", layout="wide")
 
 # ─────────────────────────────
 # CUSTOM CSS
@@ -116,21 +93,19 @@ st.markdown(
 
 @st.cache_resource
 def get_engine():
-    print(st.secrets["DATABASE_URL"])
     return create_engine(st.secrets["DATABASE_URL"])
-
 
 @st.cache_data(ttl=300)
 def load_data():
     engine = get_engine()
 
     customer_df = pd.read_sql(
-        "SELECT * FROM customer_survey",
+        "SELECT * FROM customer_survey_anon",
         engine
     )
 
     newsletter_df = pd.read_sql(
-        "SELECT * FROM newsletter_survey",
+        "SELECT * FROM newsletter_survey_anon",
         engine
     )
 
@@ -168,7 +143,7 @@ if "subpage" not in st.session_state:
 # ─────────────────────────────
 # SIDEBAR
 # ─────────────────────────────
-st.sidebar.image("logo.png", width=330)
+st.sidebar.image("logo.png.png", width=330)
 st.sidebar.title("Dashboard Menu")
 
 
@@ -196,15 +171,7 @@ with st.sidebar.expander("Customer Survey", expanded=True):
 with st.sidebar.expander("Newsletter Survey", expanded=True):
     nav_button("Overview", "Newsletter Survey", "Overview", "newsletter_overview")
     nav_button("Semantic Search", "Newsletter Survey", "Semantic Search", "newsletter_search")
-with st.sidebar:
-    st.markdown(f"""
-        <div style="font-family: 'Jost', sans-serif; font-size: 12px; 
-                    color: #9c8c7a; letter-spacing: 1px; padding: 8px 0 16px 0;
-                    border-bottom: 1px solid #e8e2d9; margin-bottom: 16px;">
-            {st.user.email}
-        </div>
-    """, unsafe_allow_html=True)
-    st.button("Sign out", on_click=st.logout)
+
 
 survey_page = st.session_state.survey_page
 subpage = st.session_state.subpage
@@ -329,10 +296,14 @@ def apply_filters(data, sentiment_col, topic_col, date_col, key_prefix=""):
     sentiment_perm_key = f"saved_{key_prefix}_sentiment"
     topic_perm_key = f"saved_{key_prefix}_topic"
     date_perm_key = f"saved_{key_prefix}_date"
+    age_perm_key = f"saved_{key_prefix}_age"
+    income_perm_key = f"saved_{key_prefix}_income"
 
     sentiment_widget_key = f"widget_{key_prefix}_sentiment"
     topic_widget_key = f"widget_{key_prefix}_topic"
     date_widget_key = f"widget_{key_prefix}_date"
+    age_widget_key = f"widget_{key_prefix}_age"
+    income_widget_key = f"widget_{key_prefix}_income"
 
     if sentiment_perm_key not in st.session_state:
         st.session_state[sentiment_perm_key] = sentiments
@@ -360,7 +331,42 @@ def apply_filters(data, sentiment_col, topic_col, date_col, key_prefix=""):
     if has_valid_dates and date_widget_key not in st.session_state:
         st.session_state[date_widget_key] = st.session_state[date_perm_key]
 
-    col1, col2, col3 = st.columns(3)
+    if survey_page == "Customer Survey":
+        age_options = sorted([
+            x for x in data[AGE_COL].dropna().astype(str).unique()
+            if str(x).strip() != ""
+        ])
+
+        income_options = sorted([
+            x for x in data[INCOME_COL].dropna().astype(str).unique()
+            if str(x).strip() != ""
+        ])
+
+        if age_perm_key not in st.session_state:
+            st.session_state[age_perm_key] = age_options
+
+        if income_perm_key not in st.session_state:
+            st.session_state[income_perm_key] = income_options
+
+        st.session_state[age_perm_key] = [
+            x for x in st.session_state[age_perm_key] if x in age_options
+        ]
+
+        st.session_state[income_perm_key] = [
+            x for x in st.session_state[income_perm_key] if x in income_options
+        ]
+
+        if age_widget_key not in st.session_state:
+            st.session_state[age_widget_key] = st.session_state[age_perm_key]
+
+        if income_widget_key not in st.session_state:
+            st.session_state[income_widget_key] = st.session_state[income_perm_key]
+
+        col1, col2, col3 = st.columns(3)
+        col4, col5 = st.columns(2)
+
+    else:
+        col1, col2, col3 = st.columns(3)
 
     with col1:
         selected_sentiments = st.multiselect(
@@ -394,10 +400,35 @@ def apply_filters(data, sentiment_col, topic_col, date_col, key_prefix=""):
             selected_dates = None
             st.info("No valid dates available.")
 
+    if survey_page == "Customer Survey":
+        with col4:
+            selected_age = st.multiselect(
+                "Age",
+                age_options,
+                key=age_widget_key,
+                on_change=save_widget_value,
+                args=(age_widget_key, age_perm_key)
+            )
+
+        with col5:
+            selected_income = st.multiselect(
+                "Income",
+                income_options,
+                key=income_widget_key,
+                on_change=save_widget_value,
+                args=(income_widget_key, income_perm_key)
+            )
+
     filtered = data[
         data[sentiment_col].isin(selected_sentiments)
         & data[topic_col].apply(lambda x: topic_match(x, selected_topics))
     ]
+
+    if survey_page == "Customer Survey":
+        filtered = filtered[
+            filtered[AGE_COL].astype(str).isin(selected_age)
+            & filtered[INCOME_COL].astype(str).isin(selected_income)
+        ]
 
     if (
         has_valid_dates
@@ -518,10 +549,12 @@ def normalize_brand_name(brand):
         "summum": "Summum",
         "yaya": "Yaya",
         "jacquemus": "Jacquemus",
+
         "samsøe samsøe": "Samsøe Samsøe",
         "samsoe samsoe": "Samsøe Samsøe",
         "samsøe": "Samsøe Samsøe",
         "samsoe": "Samsøe Samsøe",
+
         "levi": "Levi's",
         "levi's": "Levi's",
         "levis": "Levi's",
@@ -529,7 +562,7 @@ def normalize_brand_name(brand):
         "levi’s": "Levi's",
         "levis jeans": "Levi's",
         "levi strauss": "Levi's",
-        "Leviâ€™S": "Levi's"
+        "leviâ€™s": "Levi's",
     }
 
     return brand_mapping.get(brand, brand.title())
@@ -548,7 +581,7 @@ def plot_brand_mentions(data):
 
         for brand in brands:
             normalized_brand = normalize_brand_name(brand)
-            print(f"Original: '{brand}' -> Normalized: '{normalized_brand}'")
+
             if normalized_brand:
                 counter[normalized_brand] += 1
 
